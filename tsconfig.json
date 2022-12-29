@@ -1,0 +1,31 @@
+//{
+//  "compilerOptions": {
+//    "target": "es2017",
+//    "lib": ["dom", "esnext"],
+//    "allowJs": true,
+//    "skipLibCheck": true,
+//    "strict": true,
+//    "forceConsistentCasingInFileNames": true,
+//    "noEmit": true,
+//    "esModuleInterop": true,
+//    "module": "esnext",
+//    "moduleResolution": "node",
+//    "resolveJsonModule": true,
+//    "incremental": true,
+//    "noUncheckedIndexedAccess": true
+//  },
+//  "include": ["**/*.ts", "**/*.cjs", "**/*.mjs"],
+//  "exclude": ["node_modules"]
+//}
+
+{
+  "compilerOptions": {
+    "module": "esnext",
+    "esModuleInterop": true,
+    "target": "es6",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "outDir": "dist"
+  },
+  "lib": ["esnext"]
+}
