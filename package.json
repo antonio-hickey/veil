@@ -2,7 +2,8 @@
   "name": "veil",
   "version": "1.0.0",
   "description": "Multi purpose cryptography tool",
-  "main": "index.ts",
+  "main": "src/index.ts",
+  "type": "module",
   "scripts": {
     "start": "tsc && node dist/index.js",
     "lint": "eslint . --ext .ts",
@@ -20,8 +21,10 @@
   "bugs": {
     "url": "https://github.com/antonio-hickey/veil/issues"
   },
-  "homepage": "https://github.com/antonio-hickey/veil#readme",
+  "homepage": "https://github.c:!om/antonio-hickey/veil#readme",
   "devDependencies": {
+    "@types/chalk-animation": "^1.6.1",
+    "@types/inquirer": "^9.0.3",
     "@typescript-eslint/eslint-plugin": "^5.47.1",
     "@typescript-eslint/parser": "^5.47.1",
     "eslint": "^8.30.0",
