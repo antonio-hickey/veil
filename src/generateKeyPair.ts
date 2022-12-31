@@ -63,15 +63,13 @@ export async function genNewKeyPair() {
       if (err) throw err;
 
       fs.writeFile(
-        keyPairOpts['key_pair_name'] + "-private.pem", 
-        privKey.toString(),
-        (err) => { if (err) throw err },
+        "src/keys/my-keys/private/" + keyPairOpts['key_pair_name'] + ".pem", 
+        privKey.toString(), (err) => { if (err) throw err },
       );
 
       fs.writeFile(
-        keyPairOpts['key_pair_name'] + "-public.pem", 
-        pubKey.toString(),
-        (err) => { if (err) throw err },
+        "src/keys/my-keys/public/" + keyPairOpts['key_pair_name'] + ".pem", 
+        pubKey.toString(), (err) => { if (err) throw err },
       );
     });
 
