@@ -10,10 +10,13 @@ const welcomeMsg = chalkAnimation.radar(
   'Welcome to veil, a multipurpose cryptography tool.'
 );
 
-// Handle the welcome message
 setTimeout(() => {
+  // Handle the welcome message
   welcomeMsg.replace('');
   welcomeMsg.stop();
+
+  // Print version and get the desired use
+  console.log('Veil version: ' + version + '\n');
 
   // Start veil
   start()
@@ -22,8 +25,7 @@ setTimeout(() => {
 async function start() {
   /* Starts veil */
 
-  // Print version and get the desired use
-  console.log('Veil version: ' + version + '\n');
+  console.log('\n')
   inquirer.prompt({
     name: 'desired_use',
     type: 'list',
@@ -40,6 +42,26 @@ async function start() {
   }).then(async (useCase: UseCase) => {
     // Map the use case to functionality
     await handleUseCase(useCase.desired_use);
+
+    // See if they want to exit or continue to new tasks
+    await inquirer.prompt({
+      name: 'exit_choice',
+      type: 'list',
+      message: '\n',
+      choices: [
+        'Return To Main Menu',
+        'Exit',
+      ],
+      filter(val: string) {
+        // Parse to number
+        return val.toLowerCase();
+      },
+    }).then(async (result: object) => {
+      if (result['exit_choice'] == "return to main menu") {
+        start(); // Recurse
+      }
+      // else do nothing (over/exit)
+    });
   });
 }
 
