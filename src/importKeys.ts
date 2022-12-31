@@ -93,7 +93,7 @@ async function importPeersKey() {
     const spinner = createSpinner('Importing Keys...').start();
 
     fs.writeFile(
-      'src/keys/peer-pub-keys/' + choices['key_pair_name'] + '.pem',
+      'src/keys/peers-pub-keys/' + choices['key_pair_name'] + '.pem',
       choices['public_key'].trim(),
       (err) => { 
         if (err) {
