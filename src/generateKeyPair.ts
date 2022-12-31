@@ -62,9 +62,19 @@ export async function genNewKeyPair() {
     generateKeyPair('rsa', keyOpts, (err, pubKey, privKey) => {
       if (err) throw err;
 
-      fs.writeFile(keyPairOpts['key_pair_name'] + "-private.pem", privKey.toString(), () => {})
-      fs.writeFile(keyPairOpts['key_pair_name'] + "-public.pem", pubKey.toString(), () => {})
+      fs.writeFile(
+        keyPairOpts['key_pair_name'] + "-private.pem", 
+        privKey.toString(),
+        (err) => { if (err) throw err },
+      );
+
+      fs.writeFile(
+        keyPairOpts['key_pair_name'] + "-public.pem", 
+        pubKey.toString(),
+        (err) => { if (err) throw err },
+      );
     });
+
     spinner.success();
   });
 
