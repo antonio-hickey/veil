@@ -3,29 +3,22 @@ import { createSpinner } from 'nanospinner';
 import fs from "fs";
 
 
-
 export async function genNewKeyPair() {
   // TODO: allow for the user to specify type
   //       instead of hardcoding rsa.
   let keyPairOptions = {}
 
   await inquirer.prompt([
-
-    // Filename for the keys
     {
       name: 'key_pair_name',
       type: 'input',
       message: 'Key pair name: ',
     },
-
-    // Passphrase
     {
       name: 'key_pair_passphrase',
       type: 'input',
       message: 'Key pair password: ',
     },
-
-    // Bit lenghth
     {
       name: 'key_pair_bits',
       type: 'list',
@@ -37,8 +30,7 @@ export async function genNewKeyPair() {
         '4096 bits | Ultra secure, but very slow',
       ],
       filter(val: string) {
-        // Parse to number
-        return +val.split(" bits")[0];
+        return +val.split(" bits")[0];  // Parsed to number
       },
     }
   ]).then(async (keyPairOpts: object) => {
@@ -62,15 +54,15 @@ export async function genNewKeyPair() {
     generateKeyPair('rsa', keyOpts, (err, pubKey, privKey) => {
       if (err) throw err;
 
-      fs.writeFile(
-        "src/keys/my-keys/private/" + keyPairOpts['key_pair_name'] + ".pem", 
-        privKey.toString(), (err) => { if (err) throw err },
-      );
+      let filename = 'src/keys/my-keys/{PUB/PRIV}/' + keyPairOpts['key_pair_name'] + '.pem'
+      let keyPair = [
+        { filename: filename.replace('{PUB/PRIV}', 'private'), content: privKey.toString() },
+        { filename: filename.replace('{PUB/PRIV}', 'public'), content: pubKey.toString() },
+      ]
 
-      fs.writeFile(
-        "src/keys/my-keys/public/" + keyPairOpts['key_pair_name'] + ".pem", 
-        pubKey.toString(), (err) => { if (err) throw err },
-      );
+      for (let key of keyPair) {
+        fs.writeFile(key.filename, key.content, (err) => { if (err) throw err });
+      }
     });
 
     spinner.success();

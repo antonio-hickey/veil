@@ -22,7 +22,7 @@ setTimeout(() => {
   console.log('Veil version: ' + version + '\n');
 
   // Start veil
-  start()
+  start();
 }, 3000);
 
 async function start() {
@@ -58,14 +58,12 @@ async function start() {
         'Exit',
       ],
       filter(val: string) {
-        // Parse to number
         return val.toLowerCase();
       },
     }).then(async (result: object) => {
       if (result['exit_choice'] == "return to main menu") {
         start(); // Recurse
       }
-      // else do nothing (over/exit)
     });
   });
 }
