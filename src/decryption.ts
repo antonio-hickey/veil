@@ -9,6 +9,7 @@ import { dirname } from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const myKeysPath = __dirname + "/../src/keys/my-keys/private";
+const _myKeysPath = myKeysPath.replace('dist/../', '') + '/';
 
 
 export default async function decryptionHandler() {
@@ -20,9 +21,7 @@ export default async function decryptionHandler() {
       'Decrypt File (outputs an decrypted file)',
       'Decrypt Message (ouputs an decrypted string)',
     ],
-    filter(val: string) {
-      return val.split(' (')[0].toLowerCase();
-    }
+    filter: (val: string) => val.split(' (')[0].toLowerCase(),
   }).then(async (choice: object) => {
     let choiceMap = {
       'decrypt file': decryptFile,
@@ -41,21 +40,14 @@ async function decryptFile() {
       name: 'file_to_decrypt',
       type: 'file-tree-selection',
       message: 'Select A File To Decrypt:',
-      transformer: (input) => {
-        return input.replace(process.cwd(), "");
-      },
+      transformer: (input) => input.replace(process.cwd(), ""),
     },
     {
       name: 'key_to_use',
       type: 'file-tree-selection',
       message: 'Select Which Key To Decrypt With:',
       root: myKeysPath,
-      transformer: (input) => {
-        return input.replace(
-          myKeysPath.replace('dist/../', '') + '/', 
-          '',
-        );
-      },
+      transformer: (input) => input.replace(_myKeysPath, ''),
     },
     {
       name: 'key_passphrase',
@@ -106,12 +98,7 @@ async function decryptMessage() {
       type: 'file-tree-selection',
       message: 'Select Which Key To Decrypt With:',
       root: myKeysPath,
-      transformer: (input) => {
-        return input.replace(
-          myKeysPath.replace('dist/../', '') + '/', 
-          '',
-        );
-      },
+      transformer: (input) => input.replace(_myKeysPath, ''),
     },
     {
       name: 'key_passphrase',

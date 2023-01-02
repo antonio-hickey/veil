@@ -8,8 +8,10 @@ import { dirname } from 'path';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const myKeysPath = __dirname + "/../src/keys/my-keys/public"
-const peersKeysPath = __dirname + "/../src/keys/peers-pub-keys"
+const myKeysPath = __dirname + '/../src/keys/my-keys/public';
+const _myKeysPath = myKeysPath.replace('dist/../', '') + '/';
+const peersKeysPath = __dirname + '/../src/keys/peers-pub-keys';
+const _peersKeysPath = peersKeysPath.replace('dist/../', '') + '/';
 
 
 export default async function encryptionHandler() {
@@ -46,42 +48,27 @@ async function encryptFile() {
         'Myself (encrypt with my public key)',
         'Someone (encrypt with someones public key)',
       ],
-      filter(val: string) {
-        return val.split(' (')[0].toLowerCase();
-      }
+      filter: (val: string) => val.split(' (')[0].toLowerCase(),
     },
-
   ]).then(async (choice: object) => {
     await inquirer.prompt([choice['reader_target'] == 'myself' ? {
         name: 'key_to_use',
         type: 'file-tree-selection',
         message: 'Select Which Key To Encrypt With:',
         root: myKeysPath,
-        transformer: (input) => {
-          return input.replace(
-            myKeysPath.replace('dist/../', '') + '/', 
-            '',
-          );
-        },
+        transformer: (input: string) => input.replace(_myKeysPath, ''),
       }: {
         name: 'key_to_use',
         type: 'file-tree-selection',
         message: 'Select Whose Key To Encrypt With:',
         root: peersKeysPath,
-        transformer: (input: string) => {
-          return input.replace(
-            peersKeysPath.replace('dist/../', '') + '/', 
-            '',
-          );
-        },
+        transformer: (input: string) => input.replace(_peersKeysPath, ''),
       },
       {
         name: 'file_to_encrypt',
         type: 'file-tree-selection',
         message: 'Select A File To Encrypt',
-        transformer: (input) => {
-          return input.replace(process.cwd(), "");
-        },
+        transformer: (input) => input.replace(process.cwd(), ''),
       },
     ]).then(async (choiceTwo: object) => {
       const spinner = createSpinner('Encrypting File').start();
@@ -113,32 +100,20 @@ async function encryptMessage() {
       'Myself (encrypt with my public key)',
       'Someone (encrypt with someones public key)',
     ],
-    filter(val: string) {
-      return val.split(' (')[0].toLowerCase();
-    }
+    filter: (val: string) => val.split(' (')[0].toLowerCase(),
   }).then(async (choice: object) => { 
     await inquirer.prompt([choice['reader_target'] == 'myself' ? {
         name: 'pub_key_to_use',
         type: 'file-tree-selection',
         message: 'Select Which Key To Encrypt With:',
         root: myKeysPath,
-        transformer: (input: string) => {
-          return input.replace(
-            myKeysPath.replace('dist/../', '') + '/', 
-            '',
-          );
-        },
+        transformer: (input: string) => input.replace(_myKeysPath, ''),
       }: {
         name: 'pub_key_to_use',
         type: 'file-tree-selection',
         message: 'Select Whose Key To Encrypt With:',
         root: peersKeysPath,
-        transformer: (input: string) => {
-          return input.replace(
-            peersKeysPath.replace('dist/../', '') + '/', 
-            '',
-          );
-        },
+        transformer: (input: string) => input.replace(_peersKeysPath, ''),
       },
       {
         name: 'secret_message',

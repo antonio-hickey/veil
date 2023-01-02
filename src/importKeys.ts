@@ -3,10 +3,11 @@ import inquirerFileTreeSelection from 'inquirer-file-tree-selection-prompt';
 import { createSpinner } from 'nanospinner';
 import fs from 'fs';
 
+const public_keys_path = process.cwd() + '/src/keys/my-keys/public/';
+
 
 export async function importKeysHandler() {
   await inquirer.prompt(
-    // Whose key
     {
       name: 'whose_key',
       type: 'list',
@@ -51,27 +52,20 @@ async function importMyKeys() {
   ]).then(async (choices: object) => {
     const spinner = createSpinner('Importing Keys...').start();
 
-    fs.writeFile(
-      'src/keys/my-keys/public/' + choices['key_pair_name'] + '.pem',
-      choices['public_key'].trim(),
-      (err) => { 
-        if (err) { 
-          spinner.error(); 
-          throw err; 
-        }
-      },
-    );
+    const filename = 'src/keys/my-keys/{PUB/PRIV}/' + choices['key_pair_name'] + '.pem'
+    let keyPair = [
+      { filename: filename.replace('{PUB/PRIV}', 'private'), content: choices['private_key'] },
+      { filename: filename.replace('{PUB/PRIV}', 'public'), content: choices['public_key'] },
+    ]
 
-    fs.writeFile(
-      'src/keys/my-keys/private/' + choices['key_pair_name'] + '.pem',
-      choices['private_key'].trim(),
-      (err) => { 
+    for (let key of keyPair) {
+      fs.writeFile(key.filename, key.content, (err) => {
         if (err) {
           spinner.error();
           throw err;
-        } 
-      }
-    );
+        }
+      });
+    }
 
     spinner.success();
   });
@@ -92,15 +86,9 @@ async function importPeersKey() {
   ]).then(async (choices: object) => {
     const spinner = createSpinner('Importing Keys...').start();
 
-    fs.writeFile(
+    fs.writeFileSync(
       'src/keys/peers-pub-keys/' + choices['key_pair_name'] + '.pem',
       choices['public_key'].trim(),
-      (err) => { 
-        if (err) {
-          spinner.error();
-          throw err;
-        }
-      },
     );
 
     spinner.success();
@@ -128,19 +116,11 @@ async function importSharedKey() {
     const spinner = createSpinner('Importing Keys...').start();
 
     if (choices['is_it_already_encrypted']) {
-      fs.writeFile(
+      fs.writeFileSync(
         'src/keys/shared-priv-keys/' + choices['key_pair_name'] + '.pem',
         choices['private_key'].trim(),
-        (err) => { 
-          if (err) {
-            spinner.error();
-            throw err;
-          }
-        },
       );
     } else {
-      const public_keys_path = process.cwd() + '/src/keys/my-keys/public/';
-
       inquirer.registerPrompt('file-tree-selection', inquirerFileTreeSelection);
       inquirer.prompt([{
         type: 'file-tree-selection',
@@ -154,27 +134,16 @@ async function importSharedKey() {
         const {
           publicEncrypt,
         } = await import('node:crypto');
-        let pubKey = "";
 
-        fs.readFile(choice['key_to_encrypt_with'], 'utf8', (err, data) => {
-          if (err) throw err;
-          pubKey = data;
+        let filename = 'src/keys/shared-priv-keys/' + choices['key_pair_name'] + '.pem';
+        let encryptedKey = publicEncrypt(
+          fs.readFileSync(choice['key_to_encrypt_with'], 'utf8'), 
+          choices['private_key'],
+        );
 
-          let encrypted_priv_key = publicEncrypt(pubKey, choices['private_key'])
-            
-          fs.writeFile(
-            'src/keys/shared-priv-keys/' + choices['key_pair_name'] + '.pem',
-            encrypted_priv_key,
-            (err) => { 
-              if (err) {
-                spinner.error();
-                throw err;
-              } 
-            },
-          );
-        });
+        fs.writeFileSync(filename, encryptedKey);
       });
-    }
+    };
 
     spinner.success();
   });
