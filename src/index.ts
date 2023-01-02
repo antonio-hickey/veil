@@ -7,6 +7,7 @@ import { importKeysHandler } from './importKeys.js';
 import encryptionHandler from './encryption.js';
 import decryptionHandler from './decryption.js';
 import { type UseCase } from './types/general.js';
+import verifingHandler from './verify.js';
 
 const version = '1.0.0';
 const welcomeMsg = chalkAnimation.radar(
@@ -38,6 +39,7 @@ async function start() {
       'Import Keys',
       'Encrypt Something',
       'Decrypt Something',
+      'Verify Signature',
     ],
     filter(val: string) {
       // make use case choice lowercase to reduce 
@@ -77,6 +79,7 @@ async function handleUseCase(useCase: string) {
     'import keys': importKeysHandler,
     'encrypt something': encryptionHandler,
     'decrypt something': decryptionHandler,
+    'verify signature': verifingHandler,
   }
 
   // Call the function based on the use case
