@@ -5,6 +5,7 @@ import chalkAnimation from 'chalk-animation';
 import { genNewKeyPair } from './generateKeyPair.js';
 import { importKeysHandler } from './importKeys.js';
 import signingHandler from './sign.js';
+import verifingHandler from './verify.js';
 import encryptionHandler from './encryption.js';
 import decryptionHandler from './decryption.js';
 import { type UseCase } from './types/general.js';
@@ -39,6 +40,7 @@ async function start() {
       'Import Keys',
       'Encrypt Something',
       'Decrypt Something',
+      'Verify Signature',
       'Sign Something',
     ],
     filter(val: string) {
@@ -80,6 +82,7 @@ async function handleUseCase(useCase: string) {
     'encrypt something': encryptionHandler,
     'decrypt something': decryptionHandler,
     'sign something': signingHandler,
+    'verify signature': verifingHandler,
   }
 
   // Call the function based on the use case
