@@ -28,9 +28,9 @@ export async function genNewKeyPair() {
     filter: (val: string) => val.toLowerCase(),
   }).then(async (choice: object) => {
     if (choice['key_type'] == "asymmetric (rsa)") {
-      generateRsaKeys();
+      await generateRsaKeys();
     } else {
-      generateAesKey();
+      await generateAesKey();
     };
   });
 }
@@ -126,18 +126,22 @@ async function generateAesKey() {
       transformer: (input: string) => input.replace(_peersKeysPath, ''),  
     }).then((choiceTwo: object) => {
       const spinner = createSpinner('Creating Key').start();
-      let filePath = _sharedKeysPath + choice['key_pair_name'] + ".encrypted";
-      let aesKey: string;
 
+      let filePath = _sharedKeysPath + choice['key_pair_name'] + ".encrypted";
+      let pubKey = fs.readFileSync(choiceTwo['key_to_use'], 'utf8');
+
+      // Generate an AES key
       generateKey('aes', { length: 256 }, (err, key) => {
         if (err) throw err;
-        aesKey = key.export().toString('hex');
+
+        // Write the encrypted key to a file in shared keys dir
+        fs.writeFileSync(filePath, 
+          // Encrypt the AES key with the public key
+          publicEncrypt(pubKey, 
+            Buffer.from(key.export().toString('hex'), 'hex'),
+          ).toString('hex'),
+        );
       });
-
-      let pubKey = fs.readFileSync(choiceTwo['key_to_use'], 'utf8');
-      let encryptedAesKey = publicEncrypt(pubKey, Buffer.from(aesKey, 'hex'));
-
-      fs.writeFileSync(filePath, encryptedAesKey.toString('hex'));
 
       spinner.success({ text: 'Created Key' });
     });
