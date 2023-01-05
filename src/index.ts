@@ -2,7 +2,7 @@
 import inquirer from 'inquirer';
 import chalkAnimation from 'chalk-animation';
 
-import { genNewKeyPair } from './generateKeyPair.js';
+import { genNewKeyPair } from './generateKeys.js';
 import { importKeysHandler } from './importKeys.js';
 import signingHandler from './sign.js';
 import verifingHandler from './verify.js';
