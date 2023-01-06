@@ -1,0 +1,37 @@
+name: Code Linter
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  es-lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Codebase linter
+      run: |
+        # Run ls for now to see where we are
+        ls
+
+        # Install node version manager
+        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+        source ~/.bashrc
+
+        # Use nvm without new shell
+        export NVM_DIR="$HOME/.nvm"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+        [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+        # Install node version 19.4.0
+        nvm install v19.4.0
+
+        # Verify node version
+        node -v
+
+        # Install node packages
+        npm install
+
+        # Run the linter
+        npm run lint
