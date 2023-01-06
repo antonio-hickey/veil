@@ -1,17 +1,15 @@
-import inquirer from "inquirer";
-import inquirerFileTreeSelection from 'inquirer-file-tree-selection-prompt';
-import { createSpinner } from 'nanospinner';
 import fs from "fs";
 
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
+import inquirer from "inquirer";
+import inquirerFileTreeSelection from 'inquirer-file-tree-selection-prompt';
+inquirer.registerPrompt('file-tree-selection', inquirerFileTreeSelection);
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const myKeysPath = __dirname + '/../src/keys/my-keys/public';
-const _myKeysPath = myKeysPath.replace('dist/../', '') + '/';
-const peersKeysPath = __dirname + '/../src/keys/peers-pub-keys';
-const _peersKeysPath = peersKeysPath.replace('dist/../', '') + '/';
+import { createSpinner } from 'nanospinner';
+
+import { 
+  myPubKeysPath, _myPubKeysPath, 
+  peersKeysPath, _peersKeysPath
+} from './paths.js';
 
 
 export default async function encryptionHandler() {
@@ -37,8 +35,6 @@ export default async function encryptionHandler() {
 }
 
 async function encryptFile() {
-  inquirer.registerPrompt('file-tree-selection', inquirerFileTreeSelection);
-
   await inquirer.prompt([
     {
       name: 'reader_target',
@@ -55,8 +51,8 @@ async function encryptFile() {
         name: 'key_to_use',
         type: 'file-tree-selection',
         message: 'Select Which Key To Encrypt With:',
-        root: myKeysPath,
-        transformer: (input: string) => input.replace(_myKeysPath, ''),
+        root: myPubKeysPath,
+        transformer: (input: string) => input.replace(_myPubKeysPath, ''),
       }: {
         name: 'key_to_use',
         type: 'file-tree-selection',
@@ -90,8 +86,6 @@ async function encryptFile() {
 }
 
 async function encryptMessage() {
-  inquirer.registerPrompt('file-tree-selection', inquirerFileTreeSelection);
-
   await inquirer.prompt({
     name: 'reader_target',
     type: 'list',
@@ -106,8 +100,8 @@ async function encryptMessage() {
         name: 'pub_key_to_use',
         type: 'file-tree-selection',
         message: 'Select Which Key To Encrypt With:',
-        root: myKeysPath,
-        transformer: (input: string) => input.replace(_myKeysPath, ''),
+        root: myPubKeysPath,
+        transformer: (input: string) => input.replace(_myPubKeysPath, ''),
       }: {
         name: 'pub_key_to_use',
         type: 'file-tree-selection',
