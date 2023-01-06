@@ -1,17 +1,12 @@
-import inquirer from "inquirer";
-import inquirerFileTreeSelection from 'inquirer-file-tree-selection-prompt';
 import fs from "fs";
-
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
 import { verify, createPublicKey } from 'node:crypto';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const peersKeysPath = __dirname + '/../src/keys/peers-pub-keys';
-const _peersKeysPath = peersKeysPath.replace('dist/../', '') + '/';
-
+import inquirer from "inquirer";
+import inquirerFileTreeSelection from 'inquirer-file-tree-selection-prompt';
 inquirer.registerPrompt('file-tree-selection', inquirerFileTreeSelection);
+
+import { peersKeysPath, _peersKeysPath } from "./paths";
+
 
 export default async function verifingHandler() {
   await inquirer.prompt([

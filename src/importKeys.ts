@@ -3,7 +3,7 @@ import inquirerFileTreeSelection from 'inquirer-file-tree-selection-prompt';
 import { createSpinner } from 'nanospinner';
 import fs from 'fs';
 
-const public_keys_path = process.cwd() + '/src/keys/my-keys/public/';
+import { myPubKeysPath, _myPubKeysPath } from './paths';
 
 
 export async function importKeysHandler() {
@@ -125,10 +125,10 @@ async function importSharedKey() {
       inquirer.prompt([{
         type: 'file-tree-selection',
         name: 'key_to_encrypt_with',
-        root: public_keys_path,
+        root: myPubKeysPath,
         message: 'Choose A Key To Encrypt It With:',
         transformer: (input) => {
-          return input.replace(public_keys_path, "");
+          return input.replace(_myPubKeysPath, "");
         }
       }]).then(async(choice: object) => {
         const {

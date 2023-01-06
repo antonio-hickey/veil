@@ -1,15 +1,13 @@
-import inquirer from "inquirer";
-import inquirerFileTreeSelection from 'inquirer-file-tree-selection-prompt';
-import { createSpinner } from 'nanospinner';
 import fs from "fs";
 
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
+import inquirer from "inquirer";
+import inquirerFileTreeSelection from 'inquirer-file-tree-selection-prompt';
+inquirer.registerPrompt('file-tree-selection', inquirerFileTreeSelection);
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const myKeysPath = __dirname + "/../src/keys/my-keys/private";
-const _myKeysPath = myKeysPath.replace('dist/../', '') + '/';
+
+import { createSpinner } from 'nanospinner';
+
+import { myPrivKeysPath, _myPrivKeysPath } from "./paths";
 
 
 export default async function decryptionHandler() {
@@ -33,8 +31,6 @@ export default async function decryptionHandler() {
 }
 
 async function decryptFile() {
-  inquirer.registerPrompt('file-tree-selection', inquirerFileTreeSelection);
-
   await inquirer.prompt([
     {
       name: 'file_to_decrypt',
@@ -46,8 +42,8 @@ async function decryptFile() {
       name: 'key_to_use',
       type: 'file-tree-selection',
       message: 'Select Which Key To Decrypt With:',
-      root: myKeysPath,
-      transformer: (input) => input.replace(_myKeysPath, ''),
+      root: myPrivKeysPath,
+      transformer: (input) => input.replace(_myPrivKeysPath, ''),
     },
     {
       name: 'key_passphrase',
@@ -85,8 +81,6 @@ async function decryptFile() {
 }
 
 async function decryptMessage() {
-  inquirer.registerPrompt('file-tree-selection', inquirerFileTreeSelection);
-
   await inquirer.prompt([
     {
       name: 'msg_to_decrypt',
@@ -97,8 +91,8 @@ async function decryptMessage() {
       name: 'key_to_use',
       type: 'file-tree-selection',
       message: 'Select Which Key To Decrypt With:',
-      root: myKeysPath,
-      transformer: (input) => input.replace(_myKeysPath, ''),
+      root: myPrivKeysPath,
+      transformer: (input) => input.replace(_myPrivKeysPath, ''),
     },
     {
       name: 'key_passphrase',
