@@ -3,7 +3,7 @@ import inquirerFileTreeSelection from 'inquirer-file-tree-selection-prompt';
 import { createSpinner } from 'nanospinner';
 import fs from 'fs';
 
-import { myPubKeysPath, _myPubKeysPath } from './paths';
+import { myPubKeysPath, _myPubKeysPath } from './paths.js';
 
 
 export async function importKeysHandler() {
