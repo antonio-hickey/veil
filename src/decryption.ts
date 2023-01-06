@@ -7,7 +7,7 @@ inquirer.registerPrompt('file-tree-selection', inquirerFileTreeSelection);
 
 import { createSpinner } from 'nanospinner';
 
-import { myPrivKeysPath, _myPrivKeysPath } from "./paths";
+import { myPrivKeysPath, _myPrivKeysPath } from "./paths.js";
 
 
 export default async function decryptionHandler() {
