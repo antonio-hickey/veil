@@ -21,7 +21,7 @@ export default async function decryptionHandler() {
 		],
 		filter: (val: string) => val.split(' (')[0].toLowerCase(),
 	}).then(async (choice: object) => {
-		let choiceMap = {
+		const choiceMap = {
 			'decrypt file': decryptFile,
 			'decrypt message': decryptMessage,
 		};
@@ -56,17 +56,17 @@ async function decryptFile() {
 		const { createPrivateKey, privateDecrypt } = await import('node:crypto');
 
 		// Set the data to decrypt
-		let dataToDecrypt = fs.readFileSync(choices['file_to_decrypt'], 'utf8');
+		const dataToDecrypt = fs.readFileSync(choices['file_to_decrypt'], 'utf8');
 
 		// Set the private key to use for decryption
-		let privKey = createPrivateKey({
+		const privKey = createPrivateKey({
 			key: fs.readFileSync(choices['key_to_use']), 
 			format: 'pem',
 			passphrase: choices['key_passphrase'],
 		});
 
 		// Decrypt the data
-		let decryptedData = privateDecrypt(privKey, Buffer.from(dataToDecrypt, 'hex'));
+		const decryptedData = privateDecrypt(privKey, Buffer.from(dataToDecrypt, 'hex'));
 		fs.writeFileSync(
 			choices['file_to_decrypt'].replace('.encrypted', ''), 
 			decryptedData.toString('utf8'),
@@ -105,14 +105,14 @@ async function decryptMessage() {
 		const { createPrivateKey, privateDecrypt } = await import('node:crypto');
 
 		// Set the data to decrypt
-		let privKey = createPrivateKey({
+		const privKey = createPrivateKey({
 			key: fs.readFileSync(choices['key_to_use']), 
 			format: 'pem',
 			passphrase: choices['key_passphrase'],
 		});
 
 		// Decrypt the data
-		let decryptedData = privateDecrypt(privKey, 
+		const decryptedData = privateDecrypt(privKey, 
 			Buffer.from(choices['msg_to_decrypt'], 'hex'),
 		);
 

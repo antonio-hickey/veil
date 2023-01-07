@@ -25,7 +25,7 @@ export default async function encryptionHandler() {
 			return val.split(' (')[0].toLowerCase();
 		}
 	}).then(async (choice: object) => {
-		let choiceMap = {
+		const choiceMap = {
 			'encrypt file': encryptFile,
 			'encrypt message': encryptMessage,
 		};
@@ -69,11 +69,11 @@ async function encryptFile() {
 			const spinner = createSpinner('Encrypting File').start();
 			const { publicEncrypt } = await import('node:crypto');
 
-			let pubKey = fs.readFileSync(choiceTwo['key_to_use'], 'utf8');
-			let dataToEncrypt = fs.readFileSync(choiceTwo['file_to_encrypt'], 'utf8');
+			const pubKey = fs.readFileSync(choiceTwo['key_to_use'], 'utf8');
+			const dataToEncrypt = fs.readFileSync(choiceTwo['file_to_encrypt'], 'utf8');
 
 			// Encrypt and save the encrypted file
-			let encryptedData = publicEncrypt(pubKey, Buffer.from(dataToEncrypt, 'utf-8'));
+			const encryptedData = publicEncrypt(pubKey, Buffer.from(dataToEncrypt, 'utf-8'));
 			fs.writeFileSync(
 				choice['file_to_encrypt'] + '.encrypted', 
 				encryptedData.toString('hex'),
@@ -117,7 +117,7 @@ async function encryptMessage() {
 			const { publicEncrypt } = await import('node:crypto');
 
 			// Encrypt the message
-			let encryptedData = publicEncrypt(
+			const encryptedData = publicEncrypt(
 				fs.readFileSync(choiceTwo['pub_key_to_use'], 'utf8'),
 				Buffer.from(choiceTwo['secret_message'], 'utf8')
 			);

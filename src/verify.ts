@@ -28,8 +28,8 @@ export default async function verifingHandler() {
 			transformer: (input: string) => input.replace(_peersKeysPath, ''),
 		},
 	]).then(async (choice: object) => {
-		let theirKey = createPublicKey({key: fs.readFileSync(choice['key_to_use'], 'utf8'), format: 'pem'});
-		let isVerified = verify(null, choice['content'].trim(), theirKey, Buffer.from(choice['signature'], 'hex'));
+		const theirKey = createPublicKey({key: fs.readFileSync(choice['key_to_use'], 'utf8'), format: 'pem'});
+		const isVerified = verify(null, choice['content'].trim(), theirKey, Buffer.from(choice['signature'], 'hex'));
 
 		console.log(isVerified ? '!!! Signature Is NOT Valid !!!' : 'Signature Is Valid');
 	});

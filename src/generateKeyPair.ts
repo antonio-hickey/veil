@@ -6,8 +6,6 @@ import fs from 'fs';
 export async function genNewKeyPair() {
 	// TODO: allow for the user to specify type
 	//			 instead of hardcoding rsa.
-	let keyPairOptions = {};
-
 	await inquirer.prompt([
 		{
 			name: 'key_pair_name',
@@ -37,7 +35,7 @@ export async function genNewKeyPair() {
 		const spinner = createSpinner('Creating keys').start();
 		const { generateKeyPair } = await import('node:crypto');
 
-		let keyOpts = {
+		const keyOpts = {
 			modulusLength: keyPairOpts['key_pair_bits'],
 			publicKeyEncoding: {
 				type: 'spki',
@@ -54,19 +52,17 @@ export async function genNewKeyPair() {
 		generateKeyPair('rsa', keyOpts, (err, pubKey, privKey) => {
 			if (err) throw err;
 
-			let filename = 'src/keys/my-keys/{PUB/PRIV}/' + keyPairOpts['key_pair_name'] + '.pem';
-			let keyPair = [
+			const filename = 'src/keys/my-keys/{PUB/PRIV}/' + keyPairOpts['key_pair_name'] + '.pem';
+			const keyPair = [
 				{ filename: filename.replace('{PUB/PRIV}', 'private'), content: privKey.toString() },
 				{ filename: filename.replace('{PUB/PRIV}', 'public'), content: pubKey.toString() },
 			];
 
-			for (let key of keyPair) {
+			for (const key of keyPair) {
 				fs.writeFile(key.filename, key.content, (err) => { if (err) throw err; });
 			}
 		});
 
 		spinner.success();
 	});
-
-	return keyPairOptions;
 }

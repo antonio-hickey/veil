@@ -76,7 +76,7 @@ async function handleUseCase(useCase: string) {
 	/* Get relevant functionality to run */
 
 	// Map of use cases (key) and functions (value)
-	let useCaseMap = {
+	const useCaseMap = {
 		'generate new keys': genNewKeyPair,
 		'import keys': importKeysHandler,
 		'encrypt something': encryptionHandler,

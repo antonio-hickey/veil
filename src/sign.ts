@@ -40,7 +40,7 @@ export default async function signingHandler() {
 			passphrase: choice['key_passphrase'],
 		});
 
-		let choiceMap = {
+		const choiceMap = {
 			'sign file': signFile,
 			'sign message': signMessage,
 		};
@@ -57,8 +57,8 @@ async function signFile(privKey: KeyObject) {
 		message: 'Choose A File To Sign:',
 		transformer: (input: string) => input.replace(process.cwd(), ''),
 	}).then(async (choice: object) => {
-		let fileContent = fs.readFileSync(choice['file_to_sign'], 'utf8');
-		let signature = sign(null, Buffer.from(fileContent, 'utf8'), privKey);
+		const fileContent = fs.readFileSync(choice['file_to_sign'], 'utf8');
+		const signature = sign(null, Buffer.from(fileContent, 'utf8'), privKey);
 		console.log('Signature: ' + signature.toString('hex'));
 	});
 }
@@ -69,7 +69,7 @@ async function signMessage(privKey: KeyObject) {
 		type: 'editor',
 		message: 'Press ENTER & Type/Paste The Message To Sign:',
 	}).then(async (choice: object) => {
-		let signature = sign(null, Buffer.from(choice['msg_to_sign'], 'utf8'), privKey);
+		const signature = sign(null, Buffer.from(choice['msg_to_sign'], 'utf8'), privKey);
 		console.log('Signature: ' + signature.toString('hex'));
 	});
 }

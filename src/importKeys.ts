@@ -53,12 +53,12 @@ async function importMyKeys() {
 		const spinner = createSpinner('Importing Keys...').start();
 
 		const filename = 'src/keys/my-keys/{PUB/PRIV}/' + choices['key_pair_name'] + '.pem';
-		let keyPair = [
+		const keyPair = [
 			{ filename: filename.replace('{PUB/PRIV}', 'private'), content: choices['private_key'] },
 			{ filename: filename.replace('{PUB/PRIV}', 'public'), content: choices['public_key'] },
 		];
 
-		for (let key of keyPair) {
+		for (const key of keyPair) {
 			fs.writeFile(key.filename, key.content, (err) => {
 				if (err) {
 					spinner.error();
@@ -135,8 +135,8 @@ async function importSharedKey() {
 					publicEncrypt,
 				} = await import('node:crypto');
 
-				let filename = 'src/keys/shared-priv-keys/' + choices['key_pair_name'] + '.pem';
-				let encryptedKey = publicEncrypt(
+				const filename = 'src/keys/shared-priv-keys/' + choices['key_pair_name'] + '.pem';
+				const encryptedKey = publicEncrypt(
 					fs.readFileSync(choice['key_to_encrypt_with'], 'utf8'), 
 					choices['private_key'],
 				);
