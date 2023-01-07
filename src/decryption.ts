@@ -36,7 +36,7 @@ async function decryptFile() {
 			name: 'file_to_decrypt',
 			type: 'file-tree-selection',
 			message: 'Select A File To Decrypt:',
-			transformer: (input) => input.replace(process.cwd(), ""),
+			transformer: (input) => input.replace(process.cwd(), ''),
 		},
 		{
 			name: 'key_to_use',
