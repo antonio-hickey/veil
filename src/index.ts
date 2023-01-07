@@ -30,7 +30,7 @@ setTimeout(() => {
 async function start() {
 	/* Starts veil */
 
-	console.log('\n')
+	console.log('\n');
 	inquirer.prompt({
 		name: 'desired_use',
 		type: 'list',
@@ -83,7 +83,7 @@ async function handleUseCase(useCase: string) {
 		'decrypt something': decryptionHandler,
 		'sign something': signingHandler,
 		'verify signature': verifingHandler,
-	}
+	};
 
 	// Call the function based on the use case
 	return await useCaseMap[useCase]();

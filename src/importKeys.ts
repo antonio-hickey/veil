@@ -26,9 +26,9 @@ export async function importKeysHandler() {
 			'my key(s)': importMyKeys,
 			'someone\'s public key': importPeersKey,
 			'a shared private key': importSharedKey,
-		}
+		};
 
-		return whoseKeyMap[choice['whose_key']]()
+		return whoseKeyMap[choice['whose_key']]();
 	});
 } 
 
@@ -52,11 +52,11 @@ async function importMyKeys() {
 	]).then(async (choices: object) => {
 		const spinner = createSpinner('Importing Keys...').start();
 
-		const filename = 'src/keys/my-keys/{PUB/PRIV}/' + choices['key_pair_name'] + '.pem'
+		const filename = 'src/keys/my-keys/{PUB/PRIV}/' + choices['key_pair_name'] + '.pem';
 		let keyPair = [
 			{ filename: filename.replace('{PUB/PRIV}', 'private'), content: choices['private_key'] },
 			{ filename: filename.replace('{PUB/PRIV}', 'public'), content: choices['public_key'] },
-		]
+		];
 
 		for (let key of keyPair) {
 			fs.writeFile(key.filename, key.content, (err) => {

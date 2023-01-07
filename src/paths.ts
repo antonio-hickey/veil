@@ -14,4 +14,4 @@ const _peersKeysPath = peersKeysPath.replace('dist/../', '') + '/';
 export {
 	__filename, __dirname, myPubKeysPath, _myPubKeysPath,
 	myPrivKeysPath, _myPrivKeysPath, peersKeysPath, _peersKeysPath,
-}
+};

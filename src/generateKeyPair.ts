@@ -6,7 +6,7 @@ import fs from 'fs';
 export async function genNewKeyPair() {
 	// TODO: allow for the user to specify type
 	//			 instead of hardcoding rsa.
-	let keyPairOptions = {}
+	let keyPairOptions = {};
 
 	await inquirer.prompt([
 		{
@@ -49,19 +49,19 @@ export async function genNewKeyPair() {
 				cipher: 'aes-256-cbc',
 				passphrase: keyPairOpts['key_pair_passphrase'],
 			},
-		}
+		};
 
 		generateKeyPair('rsa', keyOpts, (err, pubKey, privKey) => {
 			if (err) throw err;
 
-			let filename = 'src/keys/my-keys/{PUB/PRIV}/' + keyPairOpts['key_pair_name'] + '.pem'
+			let filename = 'src/keys/my-keys/{PUB/PRIV}/' + keyPairOpts['key_pair_name'] + '.pem';
 			let keyPair = [
 				{ filename: filename.replace('{PUB/PRIV}', 'private'), content: privKey.toString() },
 				{ filename: filename.replace('{PUB/PRIV}', 'public'), content: pubKey.toString() },
-			]
+			];
 
 			for (let key of keyPair) {
-				fs.writeFile(key.filename, key.content, (err) => { if (err) throw err });
+				fs.writeFile(key.filename, key.content, (err) => { if (err) throw err; });
 			}
 		});
 
