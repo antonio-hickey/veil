@@ -1,6 +1,6 @@
-import inquirer from "inquirer";
+import inquirer from 'inquirer';
 import { createSpinner } from 'nanospinner';
-import fs from "fs";
+import fs from 'fs';
 
 
 export async function genNewKeyPair() {
@@ -30,7 +30,7 @@ export async function genNewKeyPair() {
         '4096 bits | Ultra secure, but very slow',
       ],
       filter(val: string) {
-        return +val.split(" bits")[0];  // Parsed to number
+        return +val.split(' bits')[0];  // Parsed to number
       },
     }
   ]).then(async (keyPairOpts: object) => {

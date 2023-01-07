@@ -1,6 +1,6 @@
-import fs from "fs";
+import fs from 'fs';
 
-import inquirer from "inquirer";
+import inquirer from 'inquirer';
 import inquirerFileTreeSelection from 'inquirer-file-tree-selection-prompt';
 inquirer.registerPrompt('file-tree-selection', inquirerFileTreeSelection);
 
@@ -76,7 +76,7 @@ async function encryptFile() {
       // Encrypt and save the encrypted file
       let encryptedData = publicEncrypt(pubKey, Buffer.from(dataToEncrypt, 'utf-8'));
       fs.writeFileSync(
-        choice['file_to_encrypt'] + ".encrypted", 
+        choice['file_to_encrypt'] + '.encrypted', 
         encryptedData.toString('hex'),
       );
 

@@ -65,7 +65,7 @@ async function start() {
         return val.toLowerCase();
       },
     }).then(async (result: object) => {
-      if (result['exit_choice'] == "return to main menu") {
+      if (result['exit_choice'] == 'return to main menu') {
         start(); // Recurse
       }
     });

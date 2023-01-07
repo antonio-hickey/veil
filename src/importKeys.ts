@@ -128,7 +128,7 @@ async function importSharedKey() {
         root: myPubKeysPath,
         message: 'Choose A Key To Encrypt It With:',
         transformer: (input) => {
-          return input.replace(_myPubKeysPath, "");
+          return input.replace(_myPubKeysPath, '');
         }
       }]).then(async(choice: object) => {
         const {
