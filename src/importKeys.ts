@@ -143,7 +143,7 @@ async function importSharedKey() {
 
 				fs.writeFileSync(filename, encryptedKey);
 			});
-		};
+		}
 
 		spinner.success();
 	});
