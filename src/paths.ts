@@ -3,17 +3,15 @@ import { dirname } from 'path';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const myPubKeysPath = __dirname + '/../src/keys/my-keys/public';
-const myPrivKeysPath = __dirname + '/../src/keys/my-keys/private';
-const peersKeysPath = __dirname + '/../src/keys/peers-pub-keys';
+const contactsPath = __dirname + '/../src/contacts'
 
 
-async function getRealPath(path: string): Promise<string> {
+function getRealPath(path: string): string {
 	return path.replace('dist/../', '') + '/';
 }
 
  
 export {
-	__filename, __dirname, myPubKeysPath,
-	myPrivKeysPath, peersKeysPath, getRealPath,
+	__filename, __dirname, contactsPath,
+	getRealPath,
 };
