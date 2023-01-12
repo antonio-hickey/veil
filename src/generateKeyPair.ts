@@ -2,6 +2,8 @@ import inquirer from 'inquirer';
 import { createSpinner } from 'nanospinner';
 import fs from 'fs';
 
+import { contactsPath, realContactsPath } from './paths.js';
+
 
 export async function genNewKeyPair() {
 	// TODO: allow for the user to specify type
@@ -52,17 +54,18 @@ export async function genNewKeyPair() {
 		generateKeyPair('rsa', keyOpts, (err, pubKey, privKey) => {
 			if (err) throw err;
 
-			const filename = 'src/keys/my-keys/{PUB/PRIV}/' + keyPairOpts['key_pair_name'] + '.pem';
-			const keyPair = [
-				{ filename: filename.replace('{PUB/PRIV}', 'private'), content: privKey.toString() },
-				{ filename: filename.replace('{PUB/PRIV}', 'public'), content: pubKey.toString() },
-			];
+			const keyName = keyPairOpts['key_pair_name'];
+			const myContactPath = realContactsPath + '/me.json';
+			const myContact = JSON.parse(
+				fs.readFileSync(myContactPath, 'utf8'),
+			);
+			
+			myContact['publicKeys'] = {...myContact['public'], [keyName]: pubKey.toString()},
+			myContact['privateKeys'] = {...myContact['private'], [keyName]: privKey.toString()},
 
-			for (const key of keyPair) {
-				fs.writeFile(key.filename, key.content, (err) => { if (err) throw err; });
-			}
+			fs.writeFileSync(myContactPath, JSON.stringify(myContact));
+
+			spinner.success();
 		});
-
-		spinner.success();
 	});
 }
