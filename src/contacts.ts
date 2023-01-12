@@ -23,7 +23,6 @@ export default async function contactsHandler() {
 				'View Contacts',
 			],
 		}, 
-
 	]).then((choice: object) => {
 		const whoseKeyMap = {
 			'Add New Contact': addContact,
@@ -66,19 +65,20 @@ async function addContact() {
 				type: 'editor',
 				message: 'Press ENTER & Paste Their Public Key OR Leave Blank And Update Later:',
 			}
-		]).then((choicesTwo: object) => {
-			const spinner = createSpinner(`Creating Contact ...`).start();
+		]).then(async (choicesTwo: object) => {
+			const spinner = createSpinner('Creating Contact ...').start();
 
 			const contactPath = _contactsPath + choices['contact_name'] + '.json'; 
 			const contactAlreadyExists = fs.existsSync(contactPath);
 
 			if (contactAlreadyExists){
-				console.log(`A Contact For ${choices['key_pair_name']} Already Exists, Please Try Again.`)
-				addContact() // Recurse
+				// eslint-disable-next-line no-return-assign, no-param-reassign
+				console.log(`A Contact For ${choices['key_pair_name']} Already Exists, Please Try Again.`);
+				await addContact(); // Recurse
 			} else {
-				let contactData = JSON.stringify({
-					"publicKey": choicesTwo['pub_key'].trim(),
-					"sharedKey": choicesTwo['shared_key'].trim(),
+				const contactData = JSON.stringify({
+					'publicKey': choicesTwo['pub_key'].trim(),
+					'sharedKey': choicesTwo['shared_key'].trim(),
 				});
 
 				fs.writeFileSync(contactPath, contactData);
@@ -86,7 +86,7 @@ async function addContact() {
 
 			spinner.success({text: 'Created Contact'});
 		});
-	})
+	});
 }
 
 async function updateContact() {
@@ -110,11 +110,11 @@ async function updateContact() {
 			],
 		},
 	]).then(async (choices: object) => {
-		const spinner = createSpinner(`Updating Contact ...`).start();
+		const spinner = createSpinner('Updating Contact ...').start();
 
 		const contactData = JSON.parse(fs.readFileSync(choices['contact_selection'], 'utf8'));
 
-		for (let x of choices['update_what']) {
+		for (const x of choices['update_what']) {
 			const keyType = x == 'Public Key' ? 'publicKey' : 'sharedKey';
 			await inquirer.prompt({
 				name: 'key',
@@ -126,7 +126,7 @@ async function updateContact() {
 		}
 
 		spinner.success({text: 'Updated Contact'});
-	})
+	});
 }
 
 async function removeContact() {
@@ -145,12 +145,12 @@ async function removeContact() {
 			type: 'confirm',
 			message: 'Are You Sure You Want To Remove This Contact ?	 (Y/n)',
 		}
-	]).then((choices: object) => {
+	]).then(async (choices: object) => {
 		if (!choices['is_sure']) return;
 
 		if (choices['contact_selection'].includes('contacts/src/contacts/me.json')) {
 			console.log('You Can NOT Remove Your Own Contact, Try Again');
-			removeContact(); // recurse
+			await removeContact(); // recurse
 		}
 
 		fs.rmSync(choices['contact_selection']);
