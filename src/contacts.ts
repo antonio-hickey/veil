@@ -6,7 +6,7 @@ import { createSpinner } from 'nanospinner';
 import fs from 'fs';
 
 import { contactsPath, getRealPath } from './paths.js';
-
+import { start } from './index.js';
 
 const _contactsPath = getRealPath(contactsPath);
 
@@ -29,7 +29,7 @@ export default async function contactsHandler() {
 			'Add New Contact': addContact,
 			'Update Contact': updateContact,
 			'Remove Contact': removeContact,
-			'View Contacts': () => {},
+			'View Contacts': viewContact,
 		};
 
 		return whoseKeyMap[choice['whose_key']]();
@@ -154,6 +154,42 @@ async function removeContact() {
 		}
 
 		fs.rmSync(choices['contact_selection']);
+	});
+}
+
+async function viewContact() {
+	await inquirer.prompt([
+		{
+			name: 'contact_selection',
+			type: 'file-tree-selection',
+			message: 'Which Contact Do You Want To View:',
+			root: contactsPath,
+			transformer: (input: string) => {
+				return input.replace(getRealPath(contactsPath), '').replace('.json', '').replaceAll('_', ' ');
+			}
+		},
+	]).then(async (choices: object) => {
+		const contact = JSON.parse(fs.readFileSync(choices['contact_selection'], 'utf8'));
+		console.log('\n', contact, '\n');
+
+		await inquirer.prompt({
+			name: 'what_next',
+			type: 'list',
+			message: 'What Would You Like To Do Next:',
+			choices: [
+				'Return To Contact Management',
+				'Return To Main Menu',
+				'Exit',
+			]
+		}).then(async (choices: object) => {
+			if (choices['what_next'] == 'Exit') process.exit(0);
+
+			if (choices['what_next'] == 'Return To Contact Management') {
+				await contactsHandler();
+			} else {
+				await start();
+			}
+		});
 	});
 }
 

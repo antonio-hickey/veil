@@ -27,11 +27,11 @@ setTimeout(() => {
 	start();
 }, 3000);
 
-async function start() {
+export async function start() {
 	/* Starts veil */
 
 	console.log('\n');
-	inquirer.prompt({
+	await inquirer.prompt({
 		name: 'desired_use',
 		type: 'list',
 		message: 'What do you want to do?',
