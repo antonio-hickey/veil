@@ -28,7 +28,7 @@ export default async function contactsHandler() {
 		const whoseKeyMap = {
 			'Add New Contact': addContact,
 			'Update Contact': updateContact,
-			'Remove Contact': () => {},
+			'Remove Contact': removeContact,
 			'View Contacts': () => {},
 		};
 
@@ -127,5 +127,33 @@ async function updateContact() {
 
 		spinner.success({text: 'Updated Contact'});
 	})
+}
+
+async function removeContact() {
+	await inquirer.prompt([
+		{
+			name: 'contact_selection',
+			type: 'file-tree-selection',
+			message: 'Which Contact Do You Want To Remove:',
+			root: contactsPath,
+			transformer: (input: string) => {
+				return input.replace(getRealPath(contactsPath), '').replace('.json', '').replaceAll('_', ' ');
+			}
+		},
+		{
+			name: 'is_sure',
+			type: 'confirm',
+			message: 'Are You Sure You Want To Remove This Contact ?	 (Y/n)',
+		}
+	]).then((choices: object) => {
+		if (!choices['is_sure']) return;
+
+		if (choices['contact_selection'].includes('contacts/src/contacts/me.json')) {
+			console.log('You Can NOT Remove Your Own Contact, Try Again');
+			removeContact(); // recurse
+		}
+
+		fs.rmSync(choices['contact_selection']);
+	});
 }
 
