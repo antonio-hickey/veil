@@ -5,7 +5,7 @@ import inquirer from 'inquirer';
 import inquirerFileTreeSelection from 'inquirer-file-tree-selection-prompt';
 inquirer.registerPrompt('file-tree-selection', inquirerFileTreeSelection);
 
-import { peersKeysPath, _peersKeysPath } from './paths.js';
+import { contactsPath, realContactsPath } from './paths.js';
 
 
 export default async function verifingHandler() {
@@ -24,10 +24,10 @@ export default async function verifingHandler() {
 			name: 'key_to_use',
 			type: 'file-tree-selection',
 			message: 'Choose Whose Key To Verify Signature With: ',
-			root: peersKeysPath,
-			transformer: (input: string) => input.replace(_peersKeysPath, ''),
+			root: contactsPath,
+			transformer: (input: string) => input.replace(realContactsPath, ''),
 		},
-	]).then(async (choice: object) => {
+	]).then((choice: object) => {
 		const theirKey = createPublicKey({key: fs.readFileSync(choice['key_to_use'], 'utf8'), format: 'pem'});
 		const isVerified = verify(null, choice['content'].trim(), theirKey, Buffer.from(choice['signature'], 'hex'));
 

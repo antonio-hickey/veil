@@ -5,10 +5,9 @@ inquirer.registerPrompt('file-tree-selection', inquirerFileTreeSelection);
 import { createSpinner } from 'nanospinner';
 import fs from 'fs';
 
-import { contactsPath, getRealPath } from './paths.js';
+import { contactsPath, realContactsPath } from './paths.js';
 import { start } from './index.js';
 
-const _contactsPath = getRealPath(contactsPath);
 
 export default async function contactsHandler() {
 	await inquirer.prompt([
@@ -68,7 +67,7 @@ async function addContact() {
 		]).then(async (choicesTwo: object) => {
 			const spinner = createSpinner('Creating Contact ...').start();
 
-			const contactPath = _contactsPath + choices['contact_name'] + '.json'; 
+			const contactPath = realContactsPath + choices['contact_name'] + '.json'; 
 			const contactAlreadyExists = fs.existsSync(contactPath);
 
 			if (contactAlreadyExists){
@@ -97,7 +96,7 @@ async function updateContact() {
 			message: 'Which Contact Do You Want To Update:',
 			root: contactsPath,
 			transformer: (input: string) => {
-				return input.replace(getRealPath(contactsPath), '').replace('.json', '').replaceAll('_', ' ');
+				return input.replace(realContactsPath, '').replace('.json', '').replaceAll('_', ' ');
 			}
 		},
 		{
@@ -137,7 +136,7 @@ async function removeContact() {
 			message: 'Which Contact Do You Want To Remove:',
 			root: contactsPath,
 			transformer: (input: string) => {
-				return input.replace(getRealPath(contactsPath), '').replace('.json', '').replaceAll('_', ' ');
+				return input.replace(realContactsPath, '').replace('.json', '').replaceAll('_', ' ');
 			}
 		},
 		{
@@ -165,7 +164,7 @@ async function viewContact() {
 			message: 'Which Contact Do You Want To View:',
 			root: contactsPath,
 			transformer: (input: string) => {
-				return input.replace(getRealPath(contactsPath), '').replace('.json', '').replaceAll('_', ' ');
+				return input.replace(realContactsPath, '').replace('.json', '').replaceAll('_', ' ');
 			}
 		},
 	]).then(async (choices: object) => {

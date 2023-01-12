@@ -7,7 +7,7 @@ inquirer.registerPrompt('file-tree-selection', inquirerFileTreeSelection);
 
 import { createSpinner } from 'nanospinner';
 
-import { myPrivKeysPath, _myPrivKeysPath } from './paths.js';
+import { contactsPath, realContactsPath } from './paths.js';
 
 
 export default async function decryptionHandler() {
@@ -42,8 +42,8 @@ async function decryptFile() {
 			name: 'key_to_use',
 			type: 'file-tree-selection',
 			message: 'Select Which Key To Decrypt With:',
-			root: myPrivKeysPath,
-			transformer: (input) => input.replace(_myPrivKeysPath, ''),
+			root: contactsPath,
+			transformer: (input) => input.replace(realContactsPath, ''),
 		},
 		{
 			name: 'key_passphrase',
@@ -91,8 +91,8 @@ async function decryptMessage() {
 			name: 'key_to_use',
 			type: 'file-tree-selection',
 			message: 'Select Which Key To Decrypt With:',
-			root: myPrivKeysPath,
-			transformer: (input) => input.replace(_myPrivKeysPath, ''),
+			root: contactsPath,
+			transformer: (input) => input.replace(realContactsPath, ''),
 		},
 		{
 			name: 'key_passphrase',
