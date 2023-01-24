@@ -49,6 +49,11 @@ async function encryptFile() {
 			type: 'file-tree-selection',
 			message: 'Select Which Key To Encrypt With:',
 			root: contactsPath,
+			onlyShowValid: true,
+			validate: (item: string) => {
+				if (item.includes('contacts/src/contacts/me.json')) return false;
+				return true;
+			},
 			transformer: (input: string) => input.replace(realContactsPath, ''),
 		},
 		{
@@ -91,6 +96,11 @@ async function encryptMessage() {
 			type: 'file-tree-selection',
 			message: 'Select Which Key To Encrypt With:',
 			root: contactsPath,
+			onlyShowValid: true,
+			validate: (item: string) => {
+				if (item.includes('contacts/src/contacts/me.json')) return false;
+				return true;
+			},
 			transformer: (input: string) => input.replace(realContactsPath, ''),
 		},
 		{
