@@ -3,7 +3,7 @@ import inquirer from 'inquirer';
 import chalkAnimation from 'chalk-animation';
 
 import { genNewKeyPair } from './generateKeyPair.js';
-import { importKeysHandler } from './importKeys.js';
+import contactsHandler from './contacts.js';
 import signingHandler from './sign.js';
 import verifingHandler from './verify.js';
 import encryptionHandler from './encryption.js';
@@ -27,17 +27,17 @@ setTimeout(() => {
 	start();
 }, 3000);
 
-async function start() {
+export async function start() {
 	/* Starts veil */
 
 	console.log('\n');
-	inquirer.prompt({
+	await inquirer.prompt({
 		name: 'desired_use',
 		type: 'list',
 		message: 'What do you want to do?',
 		choices: [
 			'Generate New keys',
-			'Import Keys',
+			'Contact Management',
 			'Encrypt Something',
 			'Decrypt Something',
 			'Verify Signature',
@@ -78,7 +78,7 @@ async function handleUseCase(useCase: string) {
 	// Map of use cases (key) and functions (value)
 	const useCaseMap = {
 		'generate new keys': genNewKeyPair,
-		'import keys': importKeysHandler,
+		'contact management': contactsHandler,
 		'encrypt something': encryptionHandler,
 		'decrypt something': decryptionHandler,
 		'sign something': signingHandler,

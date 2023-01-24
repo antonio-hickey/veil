@@ -5,7 +5,7 @@ import inquirer from 'inquirer';
 import inquirerFileTreeSelection from 'inquirer-file-tree-selection-prompt';
 inquirer.registerPrompt('file-tree-selection', inquirerFileTreeSelection);
 
-import { myPrivKeysPath, _myPrivKeysPath } from './paths.js';
+import { contactsPath, realContactsPath } from './paths.js';
 
 
 export default async function signingHandler() {
@@ -24,8 +24,8 @@ export default async function signingHandler() {
 			name: 'key_to_use',
 			type: 'file-tree-selection',
 			message: 'Choose A Key To Sign With:',
-			root: myPrivKeysPath,
-			transformer: (input: string) => input.replace(_myPrivKeysPath, ''),
+			root: contactsPath,
+			transformer: (input: string) => input.replace(realContactsPath, ''),
 		},
 		{
 			name: 'key_passphrase',
@@ -33,7 +33,7 @@ export default async function signingHandler() {
 			message: 'Password For The Key: (leave blank if no password)',
 			mask: true,
 		},
-	]).then(async (choice: object) => {
+	]).then((choice: object) => {
 		const privKey = createPrivateKey({
 			key: fs.readFileSync(choice['key_to_use']), 
 			format: 'pem',
@@ -56,7 +56,7 @@ async function signFile(privKey: KeyObject) {
 		type: 'file-tree-selection',
 		message: 'Choose A File To Sign:',
 		transformer: (input: string) => input.replace(process.cwd(), ''),
-	}).then(async (choice: object) => {
+	}).then((choice: object) => {
 		const fileContent = fs.readFileSync(choice['file_to_sign'], 'utf8');
 		const signature = sign(null, Buffer.from(fileContent, 'utf8'), privKey);
 		console.log('Signature: ' + signature.toString('hex'));
@@ -68,7 +68,7 @@ async function signMessage(privKey: KeyObject) {
 		name: 'msg_to_sign',
 		type: 'editor',
 		message: 'Press ENTER & Type/Paste The Message To Sign:',
-	}).then(async (choice: object) => {
+	}).then((choice: object) => {
 		const signature = sign(null, Buffer.from(choice['msg_to_sign'], 'utf8'), privKey);
 		console.log('Signature: ' + signature.toString('hex'));
 	});

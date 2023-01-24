@@ -6,10 +6,7 @@ inquirer.registerPrompt('file-tree-selection', inquirerFileTreeSelection);
 
 import { createSpinner } from 'nanospinner';
 
-import { 
-	myPubKeysPath, _myPubKeysPath, 
-	peersKeysPath, _peersKeysPath
-} from './paths.js';
+import { contactsPath, realContactsPath } from './paths.js';
 
 
 export default async function encryptionHandler() {
@@ -47,18 +44,17 @@ async function encryptFile() {
 			filter: (val: string) => val.split(' (')[0].toLowerCase(),
 		},
 	]).then(async (choice: object) => {
-		await inquirer.prompt([choice['reader_target'] == 'myself' ? {
+		await inquirer.prompt([{
 			name: 'key_to_use',
 			type: 'file-tree-selection',
 			message: 'Select Which Key To Encrypt With:',
-			root: myPubKeysPath,
-			transformer: (input: string) => input.replace(_myPubKeysPath, ''),
-		}: {
-			name: 'key_to_use',
-			type: 'file-tree-selection',
-			message: 'Select Whose Key To Encrypt With:',
-			root: peersKeysPath,
-			transformer: (input: string) => input.replace(_peersKeysPath, ''),
+			root: contactsPath,
+			onlyShowValid: true,
+			validate: (item: string) => {
+				if (item.includes('contacts/src/contacts/me.json')) return false;
+				return true;
+			},
+			transformer: (input: string) => input.replace(realContactsPath, ''),
 		},
 		{
 			name: 'file_to_encrypt',
@@ -95,24 +91,23 @@ async function encryptMessage() {
 		],
 		filter: (val: string) => val.split(' (')[0].toLowerCase(),
 	}).then(async (choice: object) => { 
-		await inquirer.prompt([choice['reader_target'] == 'myself' ? {
+		await inquirer.prompt({
 			name: 'pub_key_to_use',
 			type: 'file-tree-selection',
 			message: 'Select Which Key To Encrypt With:',
-			root: myPubKeysPath,
-			transformer: (input: string) => input.replace(_myPubKeysPath, ''),
-		}: {
-			name: 'pub_key_to_use',
-			type: 'file-tree-selection',
-			message: 'Select Whose Key To Encrypt With:',
-			root: peersKeysPath,
-			transformer: (input: string) => input.replace(_peersKeysPath, ''),
+			root: contactsPath,
+			onlyShowValid: true,
+			validate: (item: string) => {
+				if (item.includes('contacts/src/contacts/me.json')) return false;
+				return true;
+			},
+			transformer: (input: string) => input.replace(realContactsPath, ''),
 		},
 		{
 			name: 'secret_message',
 			type: 'editor',
 			message: 'Press ENTER & Type Your Secret Message:',
-		}]).then(async (choiceTwo: object) => {
+		}).then(async (choiceTwo: object) => {
 			const spinner = createSpinner('Encrypting Message').start();
 			const { publicEncrypt } = await import('node:crypto');
 
